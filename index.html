@@ -21,7 +21,7 @@
       radial-gradient(circle at top, rgba(120,240,255,0.25), transparent 35%),
       linear-gradient(180deg,#031b34 0%, #072b4f 35%, #05111f 100%);
       color:white;
-      overflow:hidden;
+      overflow-x:hidden; overflow-y:auto; scroll-behavior:smooth;
     }
 
     body::before{
@@ -43,6 +43,8 @@
     }
 
     header{
+      position:sticky;
+      top:0;
       height:90px;
       display:flex;
       align-items:center;
@@ -91,24 +93,19 @@
 
     main{
       flex:1;
-      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:80px;
+      padding:40px 0 120px;
     }
 
     .page{
-      position:absolute;
-      inset:0;
-      opacity:0;
-      pointer-events:none;
-      transform:translateX(50px);
-      transition:0.5s;
-      overflow-y:auto;
+      min-height:100vh;
+      width:100%;
       padding:40px;
-    }
-
-    .page.active{
       opacity:1;
-      pointer-events:auto;
-      transform:translateX(0);
+      transform:none;
+      position:relative;
     }
 
     .hero{
@@ -293,7 +290,29 @@
         padding:20px;
       }
     }
-  </style>
+  
+    .card{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(124,244,255,0.08), transparent 60%);
+      pointer-events:none;
+    }
+
+    .hero::after{
+      content:'YG STYLE';
+      margin-top:30px;
+      font-size:0.9rem;
+      letter-spacing:8px;
+      opacity:0.5;
+    }
+
+</style>
 </head>
 
 <body>
@@ -312,6 +331,7 @@
       <button class="nav-btn" data-page="busan">부산 이슈</button>
       <button class="nav-btn" data-page="pknu">부경대 뉴스</button>
       <button class="nav-btn" data-page="welfare">사회복지 통계</button>
+      <button class="nav-btn" data-page="treasure">TREASURE</button>
     </nav>
 
   </header>
@@ -454,31 +474,95 @@
 
     </section>
 
-  </main>
+  
+    <!-- TREASURE -->
+    <section class="page" id="treasure">
+
+      <div class="card" style="margin-bottom:40px;">
+
+        <h2>TRASURE MEMBERS</h2>
+
+        <div class="grid">
+
+          <div class="stat-item">최현석</div>
+          <div class="stat-item">지훈</div>
+          <div class="stat-item">요시</div>
+          <div class="stat-item">준규</div>
+          <div class="stat-item">윤재혁</div>
+          <div class="stat-item">아사히</div>
+          <div class="stat-item">도영</div>
+          <div class="stat-item">하루토</div>
+          <div class="stat-item">박정우</div>
+          <div class="stat-item">소정환</div>
+
+        </div>
+
+        <div class="source">
+          출처 : YG ENTERTAINMENT 공식 아티스트 정보 참고
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <h2>TREASURE 대표곡</h2>
+
+        <div class="stat-list">
+
+          <div class="stat-item">
+            <strong>JIKJIN</strong><br><br>
+            강렬한 비트와 질주감이 특징인 트레저 대표곡
+          </div>
+
+          <div class="stat-item">
+            <strong>DARARI</strong><br><br>
+            감성적인 분위기로 글로벌 인기를 얻은 곡
+          </div>
+
+          <div class="stat-item">
+            <strong>BOY</strong><br><br>
+            트레저의 데뷔곡으로 에너지 넘치는 퍼포먼스가 특징
+          </div>
+
+          <div class="stat-item">
+            <strong>BONA BONA</strong><br><br>
+            웅장한 사운드와 퍼포먼스 중심의 타이틀곡
+          </div>
+
+        </div>
+
+        <div class="source">
+          출처 : YG ENTERTAINMENT 공식 홈페이지 및 음원 정보 참고
+        </div>
+
+      </div>
+
+    </section>
+
+</main>
 
 </div>
 
 <script>
 
   // =========================
-  // 메뉴 화면 전환
+  // 스크롤 이동 메뉴
   // =========================
 
   const buttons = document.querySelectorAll('.nav-btn');
-  const pages = document.querySelectorAll('.page');
 
   buttons.forEach(btn => {
 
     btn.addEventListener('click', () => {
 
       buttons.forEach(b => b.classList.remove('active'));
-      pages.forEach(p => p.classList.remove('active'));
-
       btn.classList.add('active');
 
       const target = btn.dataset.page;
 
-      document.getElementById(target).classList.add('active');
+      document.getElementById(target).scrollIntoView({
+        behavior:'smooth'
+      });
 
     });
 
