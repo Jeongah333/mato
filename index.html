@@ -775,34 +775,361 @@
 
   <div class="card">
 
-<h2>📊 대한민국 사회복지 만족도 현황</h2>
-
-<div class="song-item">
-<strong>전체 평균 만족도</strong><br>
-5.4점 / 6점
 </div>
 
-<div class="song-item">
-<strong>긍정 평가 비율</strong><br>
-91.7% (보통 이상 응답)
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>통계 데이터 대시보드</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{\n      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      background:
+      radial-gradient(circle at top, rgba(120,240,255,0.25), transparent 35%),
+      linear-gradient(180deg,#031b34 0%, #072b4f 35%, #05111f 100%);
+      color:white;
+      overflow-x:hidden; overflow-y:auto; scroll-behavior:smooth;
+      padding: 40px 20px;
+    }
+
+    body::before{\n      content:\"\";
+      position:fixed;
+      inset:0;
+      background:
+      radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size:25px 25px;
+      opacity:0.4;
+      pointer-events:none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 기존 차트 섹션 스타일 */
+    .chart-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .chart-section h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #7cf4ff;
+      text-shadow: 0 0 10px rgba(124,244,255,0.3);
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 350px;
+    }
+
+    /* 새로 추가된 테이블 섹션 스타일 */
+    .table-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .table-section h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #7cf4ff;
+      text-shadow: 0 0 10px rgba(124,244,255,0.3);
+    }
+
+    .table-section .subtitle {
+      font-size: 14px;
+      color: #8da2bb;
+      margin-bottom: 20px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      text-align: center;
+      min-width: 900px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    th {
+      background-color: rgba(7, 43, 79, 0.6);
+      color: #7cf4ff;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .text-left {
+      text-align: left;
+      padding-left: 15px;
+    }
+
+    /* 전체(소계) 행 하이라이트 */
+    .row-highlight {
+      background-color: rgba(124, 244, 255, 0.1) !important;
+      font-weight: bold;
+      color: #7cf4ff;
+    }
+
+    /* 스크롤바 커스텀 */
+    .table-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-wrapper::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(124, 244, 255, 0.3);
+      border-radius: 4px;
+    }
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: rgba(124, 244, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="chart-section">
+    <h2>복지 분야별 예산 비율</h2>
+    <div class="chart-container">
+      <canvas id="budgetChart"></canvas>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <h2>평일에 참여한 여가활동 만족도 (문화예술 관람활동)</h2>
+    <div class="subtitle">출처: 문화체육관광부 「국민여가활동조사」 (2022년 데이터)</div>
+    
+    <div class="table-wrapper">
+      <table id="satisfactionTable">
+        <thead>
+          <tr>
+            <th>통계분류(1)</th>
+            <th>통계분류(2)</th>
+            <th>표본수</th>
+            <th>불만족한다 (%)</th>
+            <th>다소 불만족 (%)</th>
+            <th>보통이다 (%)</th>
+            <th>다소 만족 (%)</th>
+            <th>만족한다 (%)</th>
+            <th>매우 만족 (%)</th>
+            <th>평균 (7점 만점)</th>
+          </tr>
+        </thead>
+        <tbody>
+          </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
-<div class="song-item">
-<strong>가장 높은 만족도</strong><br>
-70세 이상 · 평균 5.6점
-</div>
+<script>
+  // 1. 기존 예산 비율 차트 스크립트
+  const ctx = document.getElementById('budgetChart').getContext('2d');
+  const budgetValues = [42, 31, 18, 9];
 
-<div class="song-item">
-<strong>특징</strong><br>
-1인 가구, 임시근로자 집단에서 높은 만족도 확인
-</div>
+  const numberPlugin = {
+    id: 'numberPlugin',
+    afterDatasetsDraw(chart){
+      const {ctx} = chart;
+      ctx.save();
+      chart.getDatasetMeta(0).data.forEach((bar, index) => {
+        const value = budgetValues[index];
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(value + '%', bar.x, bar.y - 10);
+      });
+    }
+  };
 
-<div class="source">
-출처 : 국가통계포털(KOSIS), 2022년 만족도 조사
-</div>
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['노인복지', '청년복지', '아동복지', '장애인복지'],
+      datasets: [{
+        label: '예산 비율',
+        data: budgetValues,
+        backgroundColor: [
+          'rgba(124,244,255,0.85)',
+          'rgba(90,210,255,0.85)',
+          'rgba(150,255,255,0.85)',
+          'rgba(80,180,255,0.85)'
+        ],
+        borderRadius: 12
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: 'white' }
+        }
+      },
+      scales: {
+        x: { ticks: { color: 'white' }, grid: { display: false } },
+        y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+      }
+    },
+    plugins: [numberPlugin]
+  });
 
-</div>
 
+  // 2. 새롭게 추가된 만족도 통계 데이터 배열 (대시는 0으로 가공 처리)
+  const surveyData = [
+    { cat1: "전체", cat2: "소계", sample: 2367, scores: [0.1, 0.1, 8, 44.6, 41.6, 5.5], avg: 5.4 },
+    { cat1: "성별", cat2: "남성", sample: 1056, scores: [0, 0.1, 7.6, 46.3, 40.9, 5.1], avg: 5.4 },
+    { cat1: "성별", cat2: "여성", sample: 1311, scores: [0.2, 0.2, 8.3, 43.3, 42.2, 5.8], avg: 5.4 },
+    { cat1: "연령별", cat2: "15~19세", sample: 151, scores: [0, 0, 10.5, 46.3, 34.8, 8.4], avg: 5.4 },
+    { cat1: "연령별", cat2: "20대", sample: 602, scores: [0, 0, 6, 45.3, 42.7, 6], avg: 5.5 },
+    { cat1: "연령별", cat2: "30대", sample: 472, scores: [0.1, 0.2, 10.4, 49.3, 36.7, 3.4], avg: 5.3 },
+    { cat1: "연령별", cat2: "40대", sample: 461, scores: [0, 0.5, 6.6, 43.8, 44.4, 4.8], avg: 5.5 },
+    { cat1: "연령별", cat2: "50대", sample: 363, scores: [0.6, 0, 6.1, 43.9, 44.5, 4.8], avg: 5.5 },
+    { cat1: "연령별", cat2: "60대", sample: 215, scores: [0, 0, 12.6, 38.3, 43.6, 5.5], avg: 5.4 },
+    { cat1: "연령별", cat2: "70세이상", sample: 103, scores: [0, 0, 9.3, 35.1, 43.1, 12.5], avg: 5.6 },
+    { cat1: "학력별", cat2: "초졸 이하", sample: 64, scores: [0, 0, 14.7, 33.3, 38, 14], avg: 5.5 },
+    { cat1: "학력별", cat2: "중졸", sample: 172, scores: [0, 0, 15.6, 37.8, 38.3, 8.2], avg: 5.4 },
+    { cat1: "학력별", cat2: "고졸", sample: 876, scores: [0, 0.1, 6.6, 44.2, 44.3, 4.8], avg: 5.5 },
+    { cat1: "학력별", cat2: "대졸이상", sample: 1255, scores: [0.2, 0.2, 7.7, 46.3, 40.5, 5.2], avg: 5.4 },
+    { cat1: "동거가구원수별", cat2: "1인", sample: 361, scores: [0, 0, 7.7, 40.9, 47.4, 3.9], avg: 5.5 },
+    { cat1: "동거가구원수별", cat2: "2인", sample: 529, scores: [0.1, 0.2, 8.1, 47.5, 37.1, 7.1], avg: 5.4 },
+    { cat1: "동거가구원수별", cat2: "3인이상", sample: 1477, scores: [0.1, 0.1, 8, 44.2, 42.3, 5.2], avg: 5.4 },
+    { cat1: "혼인상태별", cat2: "미혼", sample: 1008, scores: [0, 0.1, 8.4, 46, 39.8, 5.8], avg: 5.4 },
+    { cat1: "혼인상태별", cat2: "기혼", sample: 1252, scores: [0.2, 0.2, 7.4, 43.7, 43.2, 5.3], avg: 5.5 },
+    { cat1: "혼인상태별", cat2: "사별/이혼/기타", sample: 107, scores: [0, 0, 13.8, 41.7, 40.9, 3.7], avg: 5.3 },
+    { cat1: "가구주여부별", cat2: "가구주", sample: 949, scores: [0, 0, 8.6, 46.7, 40, 4.7], avg: 5.4 },
+    { cat1: "가구주여부별", cat2: "가구주 아님", sample: 1418, scores: [0.2, 0.2, 7.7, 43.6, 42.4, 5.9], avg: 5.5 },
+    { cat1: "종사자지위별", cat2: "상용근로자", sample: 858, scores: [0, 0.3, 7.5, 47.2, 40, 4.8], avg: 5.4 },
+    { cat1: "종사자지위별", cat2: "임시근로자", sample: 154, scores: [0, 0, 5.3, 40.1, 46.8, 7.8], avg: 5.6 },
+    { cat1: "종사자지위별", cat2: "일용근로자", sample: 27, scores: [0, 0, 10, 50.2, 30.2, 9.6], avg: 5.4 },
+    { cat1: "종사자지위별", cat2: "고용원이 있는 자영업자", sample: 75, scores: [0, 0, 7.4, 33.8, 57.8, 1], avg: 5.5 },
+    { cat1: "종사자지위별", cat2: "고용원이 없는 자영업자", sample: 270, scores: [0.8, 0, 9.1, 47.8, 36, 6.3], avg: 5.4 },
+    { cat1: "종사자지위별", cat2: "무급가족종사자", sample: 31, scores: [0, 0, 14.6, 64, 18, 3.4], avg: 5.1 },
+    { cat1: "종사자지위별", cat2: "기타종사자", sample: 12, scores: [0, 0, 8.6, 49.3, 42.1, 0], avg: 5.3 },
+    { cat1: "종사자지위별", cat2: "해당없음(무직)", sample: 940, scores: [0, 0, 8.4, 42.1, 43.8, 5.8], avg: 5.5 },
+    { cat1: "가구소득별", cat2: "100만원 미만", sample: 106, scores: [0, 0, 4.6, 36.5, 50.9, 8], avg: 5.6 },
+    { cat1: "가구소득별", cat2: "100~200만원", sample: 106, scores: [0, 0, 6.4, 35.1, 48.9, 9.6], avg: 5.6 },
+    { cat1: "가구소득별", cat2: "200~300만원", sample: 260, scores: [0, 0, 8.1, 36.5, 51, 4.5], avg: 5.5 },
+    { cat1: "가구소득별", cat2: "300~400만원", sample: 418, scores: [0, 0, 10.6, 50.7, 34.9, 3.8], avg: 5.3 },
+    { cat1: "가구소득별", cat2: "400~500만원", sample: 486, scores: [0, 0.4, 11.1, 46.8, 36, 5.6], avg: 5.4 },
+    { cat1: "가구소득별", cat2: "500~600만원", sample: 449, scores: [0.5, 0.1, 6.3, 49.2, 39.1, 4.7], avg: 5.4 },
+    { cat1: "가구소득별", cat2: "600만원 이상", sample: 542, scores: [0, 0, 5.9, 40, 47.5, 6.6], avg: 5.5 },
+    { cat1: "지역규모별", cat2: "대도시", sample: 1292, scores: [0, 0, 6.7, 44.5, 43.3, 5.4], avg: 5.5 },
+    { cat1: "지역규모별", cat2: "중소도시", sample: 711, scores: [0.3, 0.4, 9.5, 45, 39.3, 5.6], avg: 5.4 },
+    { cat1: "지역규모별", cat2: "읍면지역", sample: 364, scores: [0, 0, 9.8, 43.9, 40.7, 5.6], avg: 5.4 },
+    { cat1: "권역별", cat2: "수도권", sample: 792, scores: [0.2, 0.2, 8, 45, 40.1, 6.5], avg: 5.4 },
+    { cat1: "권역별", cat2: "강원/제주권", sample: 149, scores: [0, 0, 12.8, 30.7, 50.5, 6], avg: 5.5 },
+    { cat1: "권역별", cat2: "충청/세종권", sample: 298, scores: [0.2, 0.4, 10, 64.6, 21.4, 3.4], avg: 5.2 },
+    { cat1: "권역별", cat2: "호남권", sample: 227, scores: [0, 0, 6.1, 32.2, 56.1, 5.6], avg: 5.6 },
+    { cat1: "권역별", cat2: "대경권", sample: 391, scores: [0, 0, 10.5, 56.5, 31.8, 1.2], avg: 5.2 },
+    { cat1: "권역별", cat2: "동남권", sample: 510, scores: [0, 0, 5.3, 34.6, 53.6, 6.4], avg: 5.6 },
+    { cat1: "17개 시도별", cat2: "서울", sample: 362, scores: [0, 0, 8.1, 45.2, 39.2, 7.5], avg: 5.5 },
+    { cat1: "17개 시도별", cat2: "부산", sample: 235, scores: [0, 0, 3.5, 30.5, 61.2, 4.8], avg: 5.7 },
+    { cat1: "17개 시도별", cat2: "대구", sample: 207, scores: [0, 0, 12.3, 57.5, 28.2, 2], avg: 5.2 },
+    { cat1: "17개 시도별", cat2: "인천", sample: 186, scores: [0, 0, 3.8, 43.9, 47.3, 5], avg: 5.5 },
+    { cat1: "17개 시도별", cat2: "광주", sample: 95, scores: [0, 0, 7.8, 24.1, 62.2, 5.8], avg: 5.7 },
+    { cat1: "17개 시도별", cat2: "대전", sample: 76, scores: [0.8, 0, 3.9, 78.5, 16.8, 0], avg: 5.1 },
+    { cat1: "17개 시도별", cat2: "울산", sample: 124, scores: [0, 0, 0.4, 39.8, 55.5, 4.3], avg: 5.6 },
+    { cat1: "17개 시도별", cat2: "세종", sample: 47, scores: [0, 0, 0.9, 70.1, 18.6, 10.4], avg: 5.4 },
+    { cat1: "17개 시도별", cat2: "경기", sample: 244, scores: [0.5, 0.5, 9.5, 45.1, 38.5, 5.9], avg: 5.4 },
+    { cat1: "17개 시도별", cat2: "강원", sample: 114, scores: [0, 0, 8.2, 30.6, 53.8, 7.4], avg: 5.6 },
+    { cat1: "17개 시도별", cat2: "충북", sample: 102, scores: [0, 1.2, 19.7, 57.2, 17.6, 4.4], avg: 5 },
+    { cat1: "17개 시도별", cat2: "충남", sample: 73, scores: [0, 0, 6.7, 59, 30.9, 3.4], avg: 5.3 },
+    { cat1: "17개 시도별", cat2: "전북", sample: 37, scores: [0, 0, 7.2, 62.9, 28.4, 1.5], avg: 5.2 },
+    { cat1: "17개 시도별", cat2: "전남", sample: 95, scores: [0, 0, 4.2, 27.6, 61.2, 6.9], avg: 5.7 },
+    { cat1: "17개 시도별", cat2: "경북", sample: 184, scores: [0, 0, 8.5, 55.5, 35.6, 0.4], avg: 5.3 },
+    { cat1: "17개 시도별", cat2: "경남", sample: 151, scores: [0, 0, 10.3, 38.7, 40.9, 10.1], avg: 5.5 },
+    { cat1: "17개 시도별", cat2: "제주", sample: 35, scores: [0, 0, 32.5, 31, 36.5, 0], avg: 5 },
+    { cat1: "장애여부별", cat2: "장애등록", sample: 19, scores: [0, 0, 0, 14.5, 55.4, 30.1], avg: 6.2 },
+    { cat1: "장애여부별", cat2: "미등록", sample: 3, scores: [0, 0, 0, 33.1, 30, 37], avg: 6 },
+    { cat1: "장애여부별", cat2: "해당사항없음", sample: 2345, scores: [0.1, 0.1, 8.1, 44.9, 41.5, 5.3], avg: 5.4 },
+    { cat1: "근무 형태", cat2: "전일제", sample: 990, scores: [0.2, 0.3, 6.9, 47.1, 40.1, 5.4], avg: 5.4 },
+    { cat1: "근무 형태", cat2: "교대제", sample: 62, scores: [0, 0, 4.1, 41.8, 48.5, 5.6], avg: 5.6 },
+    { cat1: "근무 형태", cat2: "시간 선택제", sample: 120, scores: [0, 0, 7.3, 38.3, 47.9, 6.5], avg: 5.5 },
+    { cat1: "근무 형태", cat2: "해당 없음", sample: 255, scores: [0.1, 0, 12, 48.9, 34.8, 4.1], avg: 5.3 },
+    { cat1: "유연 근무제 여부", cat2: "시행", sample: 140, scores: [0.2, 0, 8, 42.6, 45, 4.2], avg: 5.4 },
+    { cat1: "유연 근무제 여부", cat2: "미시행", sample: 775, scores: [0, 0.4, 6.7, 48.5, 38.7, 5.7], avg: 5.4 },
+    { cat1: "유연 근무제 여부", cat2: "해당 없음", sample: 512, scores: [0.5, 0, 9.3, 44.4, 40.8, 5], avg: 5.4 }
+  ];
+
+  const tbody = document.querySelector("#satisfactionTable tbody");
+
+  // 표 구조 생성 및 바인딩
+  surveyData.forEach(row => {
+    const tr = document.createElement("tr");
+    
+    // 전체 소계 행 특별 표시
+    if(row.cat1 === "전체") {
+      tr.classList.add("row-highlight");
+    }
+
+    // 0 값은 가독성을 위해 대시(-)로 다시 화면 표시 처리
+    const renderVal = (val) => val === 0 ? '-' : val;
+
+    tr.innerHTML = `
+      <td class="text-left">${row.cat1}</td>
+      <td class="text-left">${row.cat2}</td>
+      <td>${row.sample.toLocaleString()}</td>
+      <td>${renderVal(row.scores[0])}</td>
+      <td>${renderVal(row.scores[1])}</td>
+      <td>${renderVal(row.scores[2])}</td>
+      <td>${renderVal(row.scores[3])}</td>
+      <td>${renderVal(row.scores[4])}</td>
+      <td>${renderVal(row.scores[5])}</td>
+      <td style="font-weight: bold; color: #7cf4ff;">${row.avg}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 </script>
 
 </body>
