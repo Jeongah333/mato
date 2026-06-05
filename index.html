@@ -3,21 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&#44053;&#50500;&#51648; &#46629;&#54588;&#54616;&#44592;</title>
+    <title>강아지 똥피하기</title>
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <main class="page">
-      <section class="game" id="game" aria-label="Dog poop dodge game">
+      <section class="game" id="game" aria-label="강아지 똥피하기 게임">
         <div class="world" id="world">
-          <div class="hud" aria-label="Game info">
+          <div class="hud" aria-label="게임 정보">
             <div>
-              <span>&#49884;&#44036;</span>
-              <strong id="time">000.0&#52488;</strong>
+              <span>시간</span>
+              <strong id="time">000.0초</strong>
             </div>
             <div>
-              <span>&#52572;&#44256;</span>
-              <strong id="best">000.0&#52488;</strong>
+              <span>최고</span>
+              <strong id="best">000.0초</strong>
             </div>
           </div>
 
@@ -26,7 +26,7 @@
           <div class="cloud cloud-two" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="cloud cloud-three" aria-hidden="true"><span></span><span></span><span></span></div>
 
-          <div class="dog" id="dog" aria-label="Dog">
+          <div class="dog" id="dog" aria-label="움직이는 강아지">
             <span class="dog-tail"></span>
             <span class="dog-body"></span>
             <span class="dog-head"></span>
@@ -37,7 +37,7 @@
 
           <div class="poop-layer" id="poopLayer" aria-hidden="true"></div>
 
-          <div class="player" id="player" aria-label="Player">
+          <div class="player" id="player" aria-label="플레이어">
             <span class="player-head"></span>
             <span class="player-hair"></span>
             <span class="player-eye eye-left"></span>
@@ -58,11 +58,11 @@
         <div class="overlay hidden" id="overlay" role="dialog" aria-modal="true">
           <div class="game-over-panel">
             <div class="trophy" aria-hidden="true">★</div>
-            <h1>&#44172;&#51076;&#50724;&#48260;</h1>
-            <p id="finalTime">000.0&#52488; &#46041;&#50504; &#48260;&#54004;&#50612;&#50836;</p>
-            <button type="button" id="restartButton" aria-label="Restart">
+            <h1>게임오버</h1>
+            <p id="finalTime">000.0초 동안 버텼어요</p>
+            <button type="button" id="restartButton" aria-label="다시 시작">
               <span aria-hidden="true">↻</span>
-              &#45796;&#49884; &#49884;&#51089;
+              다시 시작
             </button>
           </div>
         </div>
