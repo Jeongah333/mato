@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "scores": {
+      ".read": true,
+      "$scoreId": {
+        ".write": "!data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['seconds', 'createdAt']) && newData.child('seconds').isNumber() && newData.child('seconds').val() >= 0 && newData.child('seconds').val() <= 3600 && newData.child('createdAt').isNumber() && newData.child('createdAt').val() <= now && newData.child('createdAt').val() >= now - 60000 && newData.childrenCount() === 2"
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
