@@ -13,3 +13,7 @@ Vercel에서는 GitHub 저장소를 연결한 뒤 Framework Preset을 `Other`로
 ## Firebase
 
 현재 게임 점수는 브라우저 `localStorage`에 저장됩니다. Firebase를 연결하려면 `src/firebase.example.js`를 참고해서 `src/firebase.js`를 만들고 Firestore에 최고 기록을 저장하도록 확장하면 됩니다.
+
+Firebase 프로젝트 ID는 `mato-746f6`로 설정되어 있습니다.
+
+Firestore 규칙은 `firestore.rules`에 있습니다. Firebase Console에서 적용하려면 Firestore Database > 규칙 탭에 들어가 `firestore.rules` 내용을 붙여넣고 게시하면 됩니다.
