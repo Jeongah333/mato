@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "scores": {
+      ".read": true,
+      "$scoreId": {
+        ".write": "newData.hasChildren(['name', 'score', 'createdAt']) && newData.child('name').isString() && newData.child('name').val().length <= 8 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 100000"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#82d8ff">
+  <meta name="description" content="강아지가 떨어뜨리는 똥을 피해 오래 살아남는 귀여운 웹게임">
+  <title>멍멍! 똥 피하기</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="cloud cloud-a"></div>
+  <div class="cloud cloud-b"></div>
+  <main>
+    <header>
+      <div class="logo"><span>🐶</span><div><b>멍멍!</b><small>똥 피하기</small></div></div>
+      <button id="soundButton" class="round-button" aria-label="소리 켜기 또는 끄기">🔊</button>
+    </header>
+
+    <section class="layout">
+      <div class="game-column">
+        <div class="score-bar">
+          <div><small>현재 점수</small><strong id="score">0</strong></div>
+          <div class="lives" aria-label="남은 목숨"><span>❤️</span><span>❤️</span><span>❤️</span></div>
+          <div><small>최고 점수</small><strong id="bestScore">0</strong></div>
+        </div>
+        <div id="game" class="game" tabindex="0">
+          <div class="sun">☀️</div>
+          <div class="far-hill"></div>
+          <div class="dog-platform">
+            <div id="dog" class="dog"><span class="tail">〰</span><span class="dog-body">🐕</span></div>
+          </div>
+          <div id="player" class="player"><span>🙋</span><i></i></div>
+          <div class="ground"><span>🌼</span><span>🌷</span><span>🌼</span><span>🌱</span><span>🌷</span></div>
+
+          <div id="startScreen" class="screen">
+            <div class="speech">조심해! 곧 떨어진다멍!</div>
+            <div class="start-dog">🐶</div>
+            <h1>멍멍! 똥 피하기</h1>
+            <p>좌우로 움직여 똥을 피하고<br>오래 살아남아 최고 점수를 세워보세요.</p>
+            <button id="startButton" class="main-button">게임 시작</button>
+            <small>키보드 ← → 또는 아래 버튼으로 이동</small>
+          </div>
+
+          <div id="gameOverScreen" class="screen hidden">
+            <div class="game-over-icon">💩</div>
+            <h2>앗, 밟아버렸다!</h2>
+            <p>이번 점수는 <strong id="finalScore">0점</strong>이에요.</p>
+            <form id="scoreForm">
+              <input id="nickname" maxlength="8" placeholder="닉네임" aria-label="랭킹에 등록할 닉네임">
+              <button class="secondary-button">점수 등록</button>
+            </form>
+            <button id="retryButton" class="main-button">다시 도전</button>
+          </div>
+        </div>
+        <div class="mobile-controls">
+          <button id="leftButton" aria-label="왼쪽 이동">←</button>
+          <span>버튼을 꾹 눌러 이동해요</span>
+          <button id="rightButton" aria-label="오른쪽 이동">→</button>
+        </div>
+      </div>
+
+      <aside>
+        <article class="panel">
+          <div class="panel-title"><span>🏆</span><div><small>HALL OF FAME</small><h2>오늘의 랭킹</h2></div></div>
+          <ol id="ranking"><li class="empty-ranking">아직 등록된 점수가 없어요.<br>첫 번째 주인공이 되어보세요!</li></ol>
+        </article>
+        <article class="panel tip">
+          <span>💡</span><div><b>멍멍이의 팁</b><p>시간이 지날수록 똥이 더 빠르고 자주 떨어져요!</p></div>
+        </article>
+        <article class="panel difficulty">
+          <b>현재 난이도</b><div class="meter"><i id="difficultyMeter"></i></div><span id="difficultyText">산책 수준</span>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
